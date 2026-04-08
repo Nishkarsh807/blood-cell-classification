@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blood Cell Classification</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: linear-gradient(to right, #141e30, #243b55);
+            color: white;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            color: black;
+            padding: 30px;
+            border-radius: 15px;
+            width: 400px;
+            margin: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        img {
+            margin-top: 15px;
+            border-radius: 10px;
+        }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        .bar {
+            height: 10px;
+            background: #ddd;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .fill {
+            height: 10px;
+            background: #3498db;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🩸 Blood Cell Classification System</h1>
+
+<div class="card">
+
+    <h3>Upload Image</h3>
+
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <br><br>
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction %}
+    <div class="result">
+        <h2>Prediction: {{ prediction }}</h2>
+        <h3>Confidence: {{ confidence }}%</h3>
+
+        <img src="{{ image }}" width="200">
+
+        <h3>Class Probabilities:</h3>
+
+        {% for cls, prob in probs %}
+            <p>{{ cls }} ({{ (prob*100)|round(2) }}%)</p>
+            <div class="bar">
+                <div class="fill" style="width: {{ prob*100 }}%"></div>
+            </div>
+        {% endfor %}
+
+        <br>
+        <a href="/"><button>Upload Another Image</button></a>
+    </div>
+    {% endif %}
+
+</div>
+
+<br><br>
+
+<h2>📊 Model Accuracy Graph</h2>
+<img src="/static/accuracy.png" width="400">
+
+</body>
+</html>
